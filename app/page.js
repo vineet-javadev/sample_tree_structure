@@ -1,101 +1,166 @@
-import Image from "next/image";
+"use client";
+import { useCallback , useEffect , useContext, useState , useRef} from "react";
+import dagre from "@dagrejs/dagre";
+import {
+  ReactFlow,
+  ReactFlowProvider,
+  Controls,
+  MiniMap,
+  Background,
+  Panel ,
+  useReactFlow,
+} from "reactflow";
+import "reactflow/dist/style.css";
+import "./globals.css";
 
-export default function Home() {
+import rootNode from "./components/nodesType/RootNode.js";
+import branchNode from "./components/nodesType/BranchNode.js";
+import leafNode from "./components/nodesType/LeafNode.js";
+import { NodesEdgesContext  } from "./service/nodesEdgesContext";
+
+
+const nodeTypes = {
+  rootNodeType: rootNode,
+  branchNodeType: branchNode,
+  leafNodeType: leafNode,
+};
+
+const nodeColor = (node) => {
+  switch (node.type) {
+    case "rootNodeType":
+      return "red";
+    case "branchNodeType":
+      return "orange";
+    default:
+      return "yellow";
+  }
+};
+
+
+// Dagre layout function to automatically position the nodes
+const getLayoutedElements = (nodes, edges, direction = 'TB') => {
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+  const isHorizontal = direction === 'LR';
+  dagreGraph.setGraph({ rankdir: direction });
+
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, { width: 350, height: 100 });
+  });
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  dagre.layout(dagreGraph);
+
+  // Update node positions after layout
+  const layoutedNodes = nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    node.position = {
+      x: nodeWithPosition.x - 0, // Adjust for node width
+      y: nodeWithPosition.y - 0, // Adjust for node height
+    };
+    return node;
+  });
+
+  return [...layoutedNodes, ...edges];
+};
+
+
+
+function Home() {
+  const { nodes, edges, setNodes , setEdges , onNodesChange, onEdgesChange } = useContext(NodesEdgesContext);
+
+  const { fitView } = useReactFlow();
+  const [ viewAngle , setViewAngle] = useState("LR");
+  // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  // const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  // const updateNodesAndEdges = (newChildren , newEdges) => {
+  //   setNodes((prevNodes) => [...prevNodes, ...newChildren]);
+  //   setEdges((prevEdges) => [...prevEdges, ...newEdges]);
+  // };
+
+
+
+  // Prevent all edges from being deleted
+  const onEdgesDelete = useCallback(() => {
+    // Do nothing here to prevent deletion of edges
+    alert("Unable to Remove edges");
+  }, []);
+
+  // const onConnect = useCallback(
+  //   (params) => setEdges((eds) => addEdge(params, eds)),
+  //   []
+  // );
+  
+  const onLayout = useCallback(
+    (direction) => {
+      const layoutedElements = getLayoutedElements(nodes, edges, direction);
+      const layoutedNodes = layoutedElements.filter((el) => el.id && el.data); // Filter nodes
+      const layoutedEdges = layoutedElements.filter((el) => el.source && el.target); // Filter edges
+
+      setNodes(layoutedNodes);
+      setEdges(layoutedEdges);
+      fitView(); // Adjust view after applying the layout
+    },
+    [nodes, edges, fitView]
+  );
+
+  useEffect(() => {
+    onLayout(viewAngle);
+  }, [])
+
+  const prevNodesRef = useRef(nodes);
+const prevEdgesRef = useRef(edges);
+
+function isEqual(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+useEffect(() => {
+  if (!isEqual(prevNodesRef.current, nodes) || !isEqual(prevEdgesRef.current, edges)) {
+    onLayout(viewAngle);
+    prevNodesRef.current = nodes;
+    prevEdgesRef.current = edges;
+  }
+}, [nodes, edges]);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="w-screen h-screen bg-slate-800">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onEdgesDelete={onEdgesDelete}
+          // onConnect={onConnect}
+          nodeTypes={nodeTypes}
+          // fitView
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+          <Background />
+          <Controls />
+          <MiniMap
+            nodeColor={nodeColor}
+            nodeStrokeWidth={3}
+            zoomable
+            pannable
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          {/* <Panel position="top-right">
+        <button className="text-white rounded-lg bg-black p-2 px-3 mr-2" onClick={() => {onLayout('TB'); setViewAngle('TB')}}>V View</button>
+        <button className="text-white rounded-lg bg-black p-2 px-3" onClick={() => {onLayout('LR'); setViewAngle('LR')}}>H View</button>
+      </Panel> */}
+        </ReactFlow>
     </div>
   );
 }
+
+const WrappedFlow = () => (
+  <ReactFlowProvider>
+    <Home />
+  </ReactFlowProvider>
+);
+
+export default WrappedFlow;
