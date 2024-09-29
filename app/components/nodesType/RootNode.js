@@ -66,7 +66,7 @@ const RootNode = ({ id, data, isConnectable }) => {
     setNodes((prevNodes) =>
       prevNodes.map((node) =>
         node.id.substring(0, id.length) == parentId &&
-    node.id.length != parentId.length
+        node.id.length != parentId.length
           ? { ...node, hidden: !node.hidden }
           : node
       )
@@ -80,14 +80,14 @@ const RootNode = ({ id, data, isConnectable }) => {
     <div
       className={`flex ${
         data.isVisible ? "visible" : "hidden"
-      } justify-center rounded bg-red-600`}
+      } justify-center rounded bg-gradient-to-b from-red-700 to-orange-950 w-[220px]`}
     >
       {/* Label for the handle */}
       <div className="absolute right-0 h-full bg-transparent text-sm flex justify-end items-center p-1">
         <span style={{ color: "white" }}>{data.childCount}</span>
       </div>
-      <div className="block max-w-[18rem] rounded-lg bg-success text-white shadow-secondary-1">
-        <div className="border-b-2 flex gap-2 items-center border-black/20 px-6 py-3 font-bold font-mono">
+      <div className="block w-full rounded-lg bg-success text-white shadow-secondary-1">
+        <div className="border-b-2  flex gap-2 rounded-t-md items-center justify-between border-black/20 px-6 py-3 font-bold font-mono">
           <span>Root : {data.label}</span>
           {data.isActive ? (
             <svg
@@ -127,7 +127,7 @@ const RootNode = ({ id, data, isConnectable }) => {
             </svg>
           )}
         </div>
-        <div className="p-6">
+        <div className="p-6 ">
           {/* <h5 className="mb-2 text-xl font-medium leading-tight">
         Success card title
       </h5>
@@ -136,7 +136,7 @@ const RootNode = ({ id, data, isConnectable }) => {
         bulk of the cards content.
       </p> */}
           <select
-            className="pr-5 z-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+            className=" pr-5 z-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
             onChange={(e) => {
               if (confirm("Would you like to make more children?") == true) {
                 let parentId = id;
