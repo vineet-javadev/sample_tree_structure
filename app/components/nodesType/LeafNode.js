@@ -63,7 +63,7 @@ const LeafNode = ({ id, data, isConnectable }) => {
   // create dynamic children of Switch
   const switchCreationHandle = (parentId, numPorts) => {
     console.log("enter in function");
-    if (data.switchExist === undefined) {
+    if (data.switchExist === null) {
       console.log("enter in if loop");
       const parentNode = nodes.find((node) => node.id === parentId);
       if (!parentNode) return;
@@ -118,7 +118,7 @@ const LeafNode = ({ id, data, isConnectable }) => {
 
   // create dynamic children of Copper
 const copperCreationHandle = (parentId, numPorts) => {
-  if (data.copperExist === undefined) {
+  if (data.copperExist === null) {
     const parentNode = nodes.find((node) => node.id === parentId);
     if (!parentNode) return;
 
@@ -681,11 +681,11 @@ const ontCreationHandle = (parentId, numPorts) => {
       </div>
       <Handle
         type="target"
-        position={Position.Left}
+        position={Position.Top}
         id="inputHandle"
         isConnectable={isConnectable}
         className="p-1 !bg-green-600 !border-green-800 "
-        style={{ left: -10 }}
+        // style={{ left: -10 }}
       />
     </div>
   );

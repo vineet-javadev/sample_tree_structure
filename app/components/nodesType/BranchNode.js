@@ -19,10 +19,10 @@ const BranchNode = ({ id, data, isConnectable }) => {
   // create dynamic children of splitter
   const handleCreateChildren = (parentId, numChildren) => {
     const parentNode = nodes.find((node) => node.id === parentId);
-    let switchAsChild = parentNode.data.switchExist === undefined ? 0 : 1;
-    let copperAsChild = parentNode.data.copperExist === undefined ? 0 : 1;
-    let ontAsChild = parentNode.data.ontExist === undefined ? 0 : 1;
-    let onuAsChild = parentNode.data.onuAsChild === undefined ? 0 : 1;
+    let switchAsChild = parentNode.data.switchExist === null ? 0 : 1;
+    let copperAsChild = parentNode.data.copperExist === null ? 0 : 1;
+    let ontAsChild = parentNode.data.ontExist === null ? 0 : 1;
+    let onuAsChild = parentNode.data.onuAsChild === null ? 0 : 1;
     let noOfSplitterPresent =
       parentNode.data.childCount -
       (switchAsChild + copperAsChild + onuAsChild + ontAsChild);
@@ -38,7 +38,15 @@ const BranchNode = ({ id, data, isConnectable }) => {
         const childId = `${parentId}-${i}`;
         const childNode = {
           id: childId,
-          data: { label: `Child ${i + 1}`, childCount: 0, isVisible: true },
+          data: {
+            label: `Child ${i + 1}`,
+            childCount: 0,
+            isVisible: true,
+            switchExist: null,
+            onuExist: null,
+            ontExist: null,
+            copperExist: null,
+          },
           position: {
             x: parentNode.position.x + 200,
             y: parentNode.position.y,
@@ -67,11 +75,11 @@ const BranchNode = ({ id, data, isConnectable }) => {
   const switchCreationHandle = (parentId, numPorts) => {
     const parentNode = nodes.find((node) => node.id === parentId);
     if (!parentNode) return;
-  
+
     const existingSwitchChild = nodes.find((node) => {
       return node.type === "switchNodeType" && node.id.startsWith(parentId);
     });
-  
+
     if (!existingSwitchChild) {
       const newChildId = `${parentId}-${data.childCount}`;
       const newChildNode = {
@@ -88,7 +96,7 @@ const BranchNode = ({ id, data, isConnectable }) => {
         type: "switchNodeType",
         draggable: false,
       };
-  
+
       const newEdge = {
         id: `${parentId}_${newChildId}`,
         source: parentId,
@@ -96,10 +104,10 @@ const BranchNode = ({ id, data, isConnectable }) => {
         animated: true,
         hidden: false,
       };
-  
+
       parentNode.data.switchExist = newChildId;
       updateNodeType(parentId, data.childCount + 1);
-  
+
       setNodes((prevNodes) => [...prevNodes, newChildNode]);
       setEdges((prevEdges) => [...prevEdges, newEdge]);
     } else {
@@ -118,7 +126,7 @@ const BranchNode = ({ id, data, isConnectable }) => {
 
   // create dynamic children of Copper
   const copperCreationHandle = (parentId, numPorts) => {
-    if (data.copperExist === undefined) {
+    if (data.copperExist === null) {
       const parentNode = nodes.find((node) => node.id === parentId);
       if (!parentNode) return;
 
@@ -298,10 +306,10 @@ const BranchNode = ({ id, data, isConnectable }) => {
     <div
       className={`flex ${
         data.isVisible ? "visible" : "hidden"
-      } justify-center rounded bg-gradient-to-b from-orange-600 to-slate-900 max-h-32  w-[220px] h-28`}
+      } justify-center rounded bg-gradient-to-b from-orange-600 pb-2 to-slate-900 max-h-32  w-[220px] h-32`}
     >
       {/* Label for the handle */}
-      <div className="absolute right-0 h-full bg-transparent text-sm flex justify-end items-center p-1">
+      <div className="absolute bottom-0 h-full bg-transparent text-sm flex justify-center items-end p-1">
         <span style={{ color: "white" }}>{data.childCount}</span>
       </div>
       <div className="block w-full rounded-lg bg-success text-white shadow-secondary-1">
@@ -715,20 +723,20 @@ const BranchNode = ({ id, data, isConnectable }) => {
       </div>
       <Handle
         type="source"
-        position={Position.Right}
+        position={Position.Bottom}
         id="give"
         isConnectable={isConnectable}
         className="p-1 !bg-green-600 !border-green-800 cursor-pointer"
-        style={{ right: -10 }}
+        // style={{ right: -10 }}
         onClick={() => toggleChildNodesVisibility(id)}
       />
       <Handle
         type="target"
-        position={Position.Left}
+        position={Position.Top}
         id="take"
         isConnectable={isConnectable}
         className="p-1 !bg-green-600 !border-green-800"
-        style={{ left: -10 }}
+        // style={{ left: -10 }}
       />
     </div>
   );

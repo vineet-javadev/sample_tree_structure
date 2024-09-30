@@ -75,11 +75,11 @@ const SwitchNode = ({ id, data, isConnectable }) => {
       </div>
       <Handle
         type="target"
-        position={Position.Left}
+        position={Position.Top}
         id="inputHandle"
         isConnectable={isConnectable}
         className="p-1 !bg-green-600 !border-green-800"
-        style={{ left: -10 }}
+        // style={{ left: -10 }}
       />
     </div>
   );

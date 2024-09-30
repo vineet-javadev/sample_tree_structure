@@ -55,15 +55,13 @@ const nodeColor = (node) => {
 };
 
 // Dagre layout function to automatically position the nodes
-const getLayoutedElements = (nodes, edges, direction = "TB") => {
+const getLayoutedElements = (nodes, edges, direction = "LR") => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-  const isHorizontal = direction === "LR";
   dagreGraph.setGraph({ rankdir: direction });
 
   nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: 350, height: 80 });
+    dagreGraph.setNode(node.id, { width: 200 , height: 200 });
   });
 
   edges.forEach((edge) => {
@@ -90,7 +88,7 @@ function Home() {
     useContext(NodesEdgesContext);
 
   const { fitView } = useReactFlow();
-  const [viewAngle, setViewAngle] = useState("LR");
+  const [viewAngle, setViewAngle] = useState("TB");
 
   const onEdgesDelete = useCallback(() => {
     alert("Unable to Remove edges");

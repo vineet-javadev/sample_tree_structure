@@ -83,10 +83,10 @@ const RootNode = ({ id, data, isConnectable }) => {
       } justify-center rounded bg-gradient-to-b from-red-700 to-orange-950 w-[220px]`}
     >
       {/* Label for the handle */}
-      <div className="absolute right-0 h-full bg-transparent text-sm flex justify-end items-center p-1">
+      <div className="absolute bottom-0 h-full bg-transparent text-sm flex justify-center items-end p-1">
         <span style={{ color: "white" }}>{data.childCount}</span>
       </div>
-      <div className="block w-full rounded-lg bg-success text-white shadow-secondary-1">
+      <div className="block w-full rounded-lg bg-success pb-2 text-white shadow-secondary-1">
         <div className="border-b-2  flex gap-2 rounded-t-md items-center justify-between border-black/20 px-6 py-3 font-bold font-mono">
           <span>Root : {data.label}</span>
           {data.isActive ? (
@@ -155,11 +155,11 @@ const RootNode = ({ id, data, isConnectable }) => {
       </div>
       <Handle
         type="source"
-        position={Position.Right}
+        position={Position.Bottom}
         id="inputHandle"
         isConnectable={isConnectable}
         className="p-1 !bg-green-600 !border-green-800 cursor-pointer"
-        style={{ right: -10 }}
+        // style={{ right: -10 }}
         onClick={() => toggleChildNodesVisibility(id)}
       />
     </div>
