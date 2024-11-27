@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# React Flow DAG Example
 
-## Getting Started
+This project is a React application that utilizes the React Flow library to create and visualize directed acyclic graphs (DAGs) using customizable nodes and edges. The layout of the graph is managed using the Dagre library for automatic positioning of nodes.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Customizable node types (Root, Branch, Leaf)
+- Automatic layout using Dagre
+- Prevent deletion of edges
+- MiniMap for better navigation
+- Background grid for easier visualization
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+To get started, clone the repository and install the dependencies:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    ```bash
+    git clone https://github.com/vineet-javadev/sample_tree_structure.git
+    cd sample_tree_structure
+    npm install 
 
-## Learn More
+ ## Usage
+To run the application, use the following command:
 
-To learn more about Next.js, take a look at the following resources:
+    ```bash
+    npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This will start the development server and open the application in your default web browser.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Components
+### Node Types
+- **Root Node:** Represented in red
+- **Branch Node:** Represented in orange
+- **Leaf Node:** Represented in yellow
 
-## Deploy on Vercel
+## Layout
+The layout of nodes is automatically managed by the Dagre library, which positions nodes based on their relationships defined by edges.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Prevent Edge Deletion
+The application is designed to prevent the deletion of edges, ensuring the integrity of the graph structure.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Customization
+You can customize the node types and their styles by modifying the nodeTypes object in the Home component. You can also change the layout direction by using the onLayout function.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like.
+
+
+## Acknowledgments
+1. Thanks to all contributors and the community for their support.
+
+### Make Sure.
+- Please note that this is a beta version and may contain bugs or inaccuracies.
+- 
+Make sure to replace `https://github.com/vineet-javadev/sample_tree_structure.git` with the actual URL of your repository. You can also customize any sections based on your specific needs or preferences.
