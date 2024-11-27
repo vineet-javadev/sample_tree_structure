@@ -5,8 +5,12 @@
         "graphlib",
         "konsi",
         "Layouted",
+        "pannable",
+        "poopup",
         "rankdir",
+        "skyblue",
         "uska",
-        "uske"
+        "uske",
+        "zoomable"
     ]
 }
